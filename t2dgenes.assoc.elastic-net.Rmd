@@ -98,6 +98,13 @@ f2 <- function(dir,tissue){
           df <- data.frame(fread(filename))
           qqunif(df$P.value,title=tissue)
 }
+f3 <- function(dir,tissue){
+          filename <- paste0(f1(dir,tissue),"_0.5_assoc.txt")
+          df <- data.frame(fread(filename))
+          df.ord <- df[order(df$P.value,decreasing=FALSE),]
+          top.genes <- df.ord$Gene[1:100]
+          return(top.genes)
+}
 ```
 
 ####Create dataframes 
@@ -106,44 +113,266 @@ f2 <- function(dir,tissue){
 
 ## WTCCC
 ```{r}
+mydir <- wtccc.dir
 sapply(tiss.vec,f2,dir=wtccc.dir)
+topgenes.df <- data.frame(sapply(tiss.vec,f3,dir=mydir),stringsAsFactors=FALSE)
+topgenes <- as.vector(t(topgenes.df))
+count.df <- data.frame(table(topgenes)); count.df$topgenes <- as.character(count.df$topgenes)
+count.df.wtccc <- count.df[order(count.df$Freq,decreasing=TRUE),]
+topgenes.wtccc <- topgenes
+plot <- ggplot(count.df.wtccc[1:20,],aes(x=reorder(topgenes,-Freq,max),y=Freq)) + 
+               geom_bar(stat="identity",fill="dodgerblue1",color="Black") + 
+               theme_bw() + coord_cartesian(ylim=c(0,15)) + 
+               theme(axis.line = element_line(colour = "black"),
+                 panel.grid.major = element_blank(),
+                 panel.grid.minor = element_blank(),
+                 panel.background = element_blank(),
+                 plot.title = element_text(lineheight=2, face="bold")) + 
+               theme(axis.text.x=element_text(angle=-30, hjust=0,size=14),panel.grid.major=element_line(size=0.1),
+               panel.grid.minor=element_blank(),axis.title.x=element_text(size=15,face="bold",vjust=-0.2),
+               axis.title.y=element_text(size=16,face="bold",vjust=0.25), panel.grid.major=element_line(size=0.1),
+               panel.grid.minor=element_blank(), axis.text.y=element_text(size=15),legend.text=element_text(size=14),
+               legend.title=element_text(size=11)) +
+               scale_y_continuous(breaks = round(seq(0,15, by = 1),1)) +
+               ylab("Tissue Count") + xlab("Gene") + ggtitle("Top Genes Across Tissues\nWTCCC")
+
+plot
+topgenes.df[1:10,]
 ```
 
 ## UM
 ```{r}
+mydir <- um.dir
 sapply(tiss.vec,f2,dir=um.dir)
+topgenes.df <- data.frame(sapply(tiss.vec,f3,dir=mydir),stringsAsFactors=FALSE)
+topgenes <- as.vector(t(topgenes.df))
+count.df <- data.frame(table(topgenes)); count.df$topgenes <- as.character(count.df$topgenes)
+count.df.um <- count.df[order(count.df$Freq,decreasing=TRUE),]
+topgenes.um <- topgenes
+plot <- ggplot(count.df.um[1:20,],aes(x=reorder(topgenes,-Freq,max),y=Freq)) + 
+               geom_bar(stat="identity",fill="dodgerblue1",color="Black") + 
+               theme_bw() + coord_cartesian(ylim=c(0,15)) + 
+               theme(axis.line = element_line(colour = "black"),
+                 panel.grid.major = element_blank(),
+                 panel.grid.minor = element_blank(),
+                 panel.background = element_blank(),
+                 plot.title = element_text(lineheight=2, face="bold")) + 
+               theme(axis.text.x=element_text(angle=-30, hjust=0,size=14),panel.grid.major=element_line(size=0.1),
+               panel.grid.minor=element_blank(),axis.title.x=element_text(size=15,face="bold",vjust=-0.2),
+               axis.title.y=element_text(size=16,face="bold",vjust=0.25), panel.grid.major=element_line(size=0.1),
+               panel.grid.minor=element_blank(), axis.text.y=element_text(size=15),legend.text=element_text(size=14),
+               legend.title=element_text(size=11)) +
+               scale_y_continuous(breaks = round(seq(0,15, by = 1),1)) +
+               ylab("Tissue Count") + xlab("Gene") + ggtitle("Top Genes Across Tissues\nUM")
+
+plot
+topgenes.df[1:10,]
 ```
 
 ## UA
 ```{r}
+mydir <- ua.dir
 sapply(tiss.vec,f2,dir=ua.dir)
+topgenes.df <- data.frame(sapply(tiss.vec,f3,dir=mydir),stringsAsFactors=FALSE)
+topgenes <- as.vector(t(topgenes.df))
+count.df <- data.frame(table(topgenes)); count.df$topgenes <- as.character(count.df$topgenes)
+count.df.ua <- count.df[order(count.df$Freq,decreasing=TRUE),]
+topgenes.ua <- topgenes
+plot <- ggplot(count.df.ua[1:20,],aes(x=reorder(topgenes,-Freq,max),y=Freq)) + 
+               geom_bar(stat="identity",fill="dodgerblue1",color="Black") + 
+               theme_bw() + coord_cartesian(ylim=c(0,15)) + 
+               theme(axis.line = element_line(colour = "black"),
+                 panel.grid.major = element_blank(),
+                 panel.grid.minor = element_blank(),
+                 panel.background = element_blank(),
+                 plot.title = element_text(lineheight=2, face="bold")) + 
+               theme(axis.text.x=element_text(angle=-30, hjust=0,size=14),panel.grid.major=element_line(size=0.1),
+               panel.grid.minor=element_blank(),axis.title.x=element_text(size=15,face="bold",vjust=-0.2),
+               axis.title.y=element_text(size=16,face="bold",vjust=0.25), panel.grid.major=element_line(size=0.1),
+               panel.grid.minor=element_blank(), axis.text.y=element_text(size=15),legend.text=element_text(size=14),
+               legend.title=element_text(size=11)) +
+               scale_y_continuous(breaks = round(seq(0,15, by = 1),1)) +
+               ylab("Tissue Count") + xlab("Gene") + ggtitle("Top Genes Across Tissues\nUA")
+
+plot
+topgenes.df[1:10,]
 ```
 
 # African-American 
 
 ## AJ
 ```{r}
+mydir <- aj.dir
 sapply(tiss.vec,f2,dir=aj.dir)
+topgenes.df <- data.frame(sapply(tiss.vec,f3,dir=mydir),stringsAsFactors=FALSE)
+topgenes <- as.vector(t(topgenes.df))
+count.df <- data.frame(table(topgenes)); count.df$topgenes <- as.character(count.df$topgenes)
+count.df.aj <- count.df[order(count.df$Freq,decreasing=TRUE),]
+topgenes.aj <- topgenes
+plot <- ggplot(count.df.aj[1:20,],aes(x=reorder(topgenes,-Freq,max),y=Freq)) + 
+               geom_bar(stat="identity",fill="dodgerblue1",color="Black") + 
+               theme_bw() + coord_cartesian(ylim=c(0,15)) + 
+               theme(axis.line = element_line(colour = "black"),
+                 panel.grid.major = element_blank(),
+                 panel.grid.minor = element_blank(),
+                 panel.background = element_blank(),
+                 plot.title = element_text(lineheight=2, face="bold")) + 
+               theme(axis.text.x=element_text(angle=-30, hjust=0,size=14),panel.grid.major=element_line(size=0.1),
+               panel.grid.minor=element_blank(),axis.title.x=element_text(size=15,face="bold",vjust=-0.2),
+               axis.title.y=element_text(size=16,face="bold",vjust=0.25), panel.grid.major=element_line(size=0.1),
+               panel.grid.minor=element_blank(), axis.text.y=element_text(size=15),legend.text=element_text(size=14),
+               legend.title=element_text(size=11)) +
+               scale_y_continuous(breaks = round(seq(0,15, by = 1),1)) +
+               ylab("Tissue Count") + xlab("Gene") + ggtitle("Top Genes Across Tissues\nAJ")
+
+plot
+topgenes.df[1:10,]
 ```
 
 ## AW
 ```{r}
+mydir <- aw.dir
 sapply(tiss.vec,f2,dir=aw.dir)
+topgenes.df <- data.frame(sapply(tiss.vec,f3,dir=mydir),stringsAsFactors=FALSE)
+topgenes <- as.vector(t(topgenes.df))
+count.df <- data.frame(table(topgenes)); count.df$topgenes <- as.character(count.df$topgenes)
+count.df.aw <- count.df[order(count.df$Freq,decreasing=TRUE),]
+topgenes.aw <- topgenes
+plot <- ggplot(count.df.aw[1:20,],aes(x=reorder(topgenes,-Freq,max),y=Freq)) + 
+               geom_bar(stat="identity",fill="dodgerblue1",color="Black") + 
+               theme_bw() + coord_cartesian(ylim=c(0,15)) + 
+               theme(axis.line = element_line(colour = "black"),
+                 panel.grid.major = element_blank(),
+                 panel.grid.minor = element_blank(),
+                 panel.background = element_blank(),
+                 plot.title = element_text(lineheight=2, face="bold")) + 
+               theme(axis.text.x=element_text(angle=-30, hjust=0,size=14),panel.grid.major=element_line(size=0.1),
+               panel.grid.minor=element_blank(),axis.title.x=element_text(size=15,face="bold",vjust=-0.2),
+               axis.title.y=element_text(size=16,face="bold",vjust=0.25), panel.grid.major=element_line(size=0.1),
+               panel.grid.minor=element_blank(), axis.text.y=element_text(size=15),legend.text=element_text(size=14),
+               legend.title=element_text(size=11)) +
+               scale_y_continuous(breaks = round(seq(0,15, by = 1),1)) +
+               ylab("Tissue Count") + xlab("Gene") + ggtitle("Top Genes Across Tissues\nAW")
+
+plot
+topgenes.df[1:10,]
 ```
 
 # Asian  
 
 ## EK
 ```{r}
+mydir <- ek.dir
 sapply(tiss.vec,f2,dir=ek.dir)
+topgenes.df <- data.frame(sapply(tiss.vec,f3,dir=mydir),stringsAsFactors=FALSE)
+topgenes <- as.vector(t(topgenes.df))
+count.df <- data.frame(table(topgenes)); count.df$topgenes <- as.character(count.df$topgenes)
+count.df.ek <- count.df[order(count.df$Freq,decreasing=TRUE),]
+topgenes.ek <- topgenes
+plot <- ggplot(count.df.ek[1:20,],aes(x=reorder(topgenes,-Freq,max),y=Freq)) + 
+               geom_bar(stat="identity",fill="dodgerblue1",color="Black") + 
+               theme_bw() + coord_cartesian(ylim=c(0,15)) + 
+               theme(axis.line = element_line(colour = "black"),
+                 panel.grid.major = element_blank(),
+                 panel.grid.minor = element_blank(),
+                 panel.background = element_blank(),
+                 plot.title = element_text(lineheight=2, face="bold")) + 
+               theme(axis.text.x=element_text(angle=-30, hjust=0,size=14),panel.grid.major=element_line(size=0.1),
+               panel.grid.minor=element_blank(),axis.title.x=element_text(size=15,face="bold",vjust=-0.2),
+               axis.title.y=element_text(size=16,face="bold",vjust=0.25), panel.grid.major=element_line(size=0.1),
+               panel.grid.minor=element_blank(), axis.text.y=element_text(size=15),legend.text=element_text(size=14),
+               legend.title=element_text(size=11)) +
+               scale_y_continuous(breaks = round(seq(0,15, by = 1),1)) +
+               ylab("Tissue Count") + xlab("Gene") + ggtitle("Top Genes Across Tissues\nEK")
+
+plot
+topgenes.df[1:10,]
 ```
 
 ## ES
 ```{r}
+mydir <- es.dir
 sapply(tiss.vec,f2,dir=es.dir)
+topgenes.df <- data.frame(sapply(tiss.vec,f3,dir=mydir),stringsAsFactors=FALSE)
+topgenes <- as.vector(t(topgenes.df))
+count.df <- data.frame(table(topgenes)); count.df$topgenes <- as.character(count.df$topgenes)
+count.df.es <- count.df[order(count.df$Freq,decreasing=TRUE),]
+topgenes.es <- topgenes
+plot <- ggplot(count.df.es[1:20,],aes(x=reorder(topgenes,-Freq,max),y=Freq)) + 
+               geom_bar(stat="identity",fill="dodgerblue1",color="Black") + 
+               theme_bw() + coord_cartesian(ylim=c(0,15)) + 
+               theme(axis.line = element_line(colour = "black"),
+                 panel.grid.major = element_blank(),
+                 panel.grid.minor = element_blank(),
+                 panel.background = element_blank(),
+                 plot.title = element_text(lineheight=2, face="bold")) + 
+               theme(axis.text.x=element_text(angle=-30, hjust=0,size=14),panel.grid.major=element_line(size=0.1),
+               panel.grid.minor=element_blank(),axis.title.x=element_text(size=15,face="bold",vjust=-0.2),
+               axis.title.y=element_text(size=16,face="bold",vjust=0.25), panel.grid.major=element_line(size=0.1),
+               panel.grid.minor=element_blank(), axis.text.y=element_text(size=15),legend.text=element_text(size=14),
+               legend.title=element_text(size=11)) +
+               scale_y_continuous(breaks = round(seq(0,15, by = 1),1)) +
+               ylab("Tissue Count") + xlab("Gene") + ggtitle("Top Genes Across Tissues\nES")
+
+plot
+topgenes.df[1:10,]
 ```
 
 
-#```{r fig.width=7, fig.height=6}
-#```
+
+## HS
+```{r}
+mydir <- hs.dir
+sapply(tiss.vec,f2,dir=hs.dir)
+topgenes.df <- data.frame(sapply(tiss.vec,f3,dir=mydir),stringsAsFactors=FALSE)
+topgenes <- as.vector(t(topgenes.df))
+count.df <- data.frame(table(topgenes)); count.df$topgenes <- as.character(count.df$topgenes)
+count.df.hs <- count.df[order(count.df$Freq,decreasing=TRUE),]
+topgenes.hs <- topgenes
+plot <- ggplot(count.df.hs[1:20,],aes(x=reorder(topgenes,-Freq,max),y=Freq)) + 
+               geom_bar(stat="identity",fill="dodgerblue1",color="Black") + 
+               theme_bw() + coord_cartesian(ylim=c(0,15)) + 
+               theme(axis.line = element_line(colour = "black"),
+                 panel.grid.major = element_blank(),
+                 panel.grid.minor = element_blank(),
+                 panel.background = element_blank(),
+                 plot.title = element_text(lineheight=2, face="bold")) + 
+               theme(axis.text.x=element_text(angle=-30, hjust=0,size=14),panel.grid.major=element_line(size=0.1),
+               panel.grid.minor=element_blank(),axis.title.x=element_text(size=15,face="bold",vjust=-0.2),
+               axis.title.y=element_text(size=16,face="bold",vjust=0.25), panel.grid.major=element_line(size=0.1),
+               panel.grid.minor=element_blank(), axis.text.y=element_text(size=15),legend.text=element_text(size=14),
+               legend.title=element_text(size=11)) +
+               scale_y_continuous(breaks = round(seq(0,15, by = 1),1)) +
+               ylab("Tissue Count") + xlab("Gene") + ggtitle("Top Genes Across Tissues\nHS")
+
+plot
+topgenes.df[1:10,]
+```
+
+# Top Genes Analyses across Datasets 
+```{r fig.width=20, fig.height=8}
+TopGenes <-  c(topgenes.hs,topgenes.wtccc,topgenes.ua,topgenes.um,topgenes.ek,
+            topgenes.es,topgenes.aj,topgenes.aw)
+count.df <- data.frame(table(TopGenes)); count.df$TopGenes <- as.character(count.df$TopGenes)
+count.df<- count.df[order(count.df$Freq,decreasing=TRUE),]
+plot <- ggplot(count.df[1:50,],aes(x=reorder(TopGenes,-Freq,max),y=Freq)) + 
+               geom_bar(stat="identity",fill="maroon",color="Black") + 
+               theme_bw() + coord_cartesian(ylim=c(0,30)) + 
+               theme(axis.line = element_line(colour = "black"),
+                 panel.grid.major = element_blank(),
+                 panel.grid.minor = element_blank(),
+                 panel.background = element_blank(),
+                 plot.title = element_text(lineheight=2, face="bold")) + 
+               theme(axis.text.x=element_text(angle=-30, hjust=0,size=14),panel.grid.major=element_line(size=0.1),
+               panel.grid.minor=element_blank(),axis.title.x=element_text(size=15,face="bold",vjust=-0.2),
+               axis.title.y=element_text(size=16,face="bold",vjust=0.25), panel.grid.major=element_line(size=0.1),
+               panel.grid.minor=element_blank(), axis.text.y=element_text(size=15),legend.text=element_text(size=14),
+               legend.title=element_text(size=11)) +
+               scale_y_continuous(breaks = round(seq(0,30, by = 2),1)) +
+               ylab("Total Count") + xlab("Gene") + ggtitle("Top Genes Across Tissues and Cohorts")
+
+plot
+write.table(count.df,"/Users/jtorres/Google Drive/Projects/PrediXcan/T2D-GENES/T2DGENES-reports-/EN.assoc.genes",
+            sep="\t",row.names=FALSE,quote=FALSE)
+```
 
