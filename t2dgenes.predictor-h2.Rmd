@@ -23,7 +23,7 @@ hsq_df[,1] <- rn
 ```
 
 #### h2 Plot 
-```{r}
+```{r fig.width=10, fig.height=10}
 hsq_plot <- ggplot(data=hsq_df, aes(y=h2, x=tissue)) + geom_errorbar(aes(ymax=h2+se,ymin=h2-se, width=0.25)) +      
                    geom_point(size=5,shape=21,aes(fill=-log(pval,base=10))) +
                    scale_fill_continuous(low="dodgerblue1",high="firebrick1",name=(expression(italic(-log(Pval))))) +     
@@ -44,7 +44,7 @@ hsq_plot
 
 
 #### Proportion h2 Explained / SNP Set Proportion (HP/SSP) Plot 
-```{r}
+```{r fig.width=10, fig.height=10}
 hsq_plot <- ggplot(data=hsq_df, aes(y=hp, x=ssp)) + geom_point(size=5,shape=21,aes(fill=-log(pval,base=10))) +
                    geom_abline(intercept=0,slope=1) + 
                    scale_fill_continuous(low="dodgerblue1",high="firebrick1",name=(expression(italic(-log(Pval))))) +     
@@ -81,7 +81,7 @@ hsq_df[,1] <- rn
 ```
 
 #### h2 Plot
-```{r}
+```{r fig.width=10, fig.height=10}
 hsq_plot <- ggplot(data=hsq_df, aes(y=h2, x=tissue)) + geom_errorbar(aes(ymax=h2+se,ymin=h2-se, width=0.25)) +      
                    geom_point(size=5,shape=21,aes(fill=-log(pval,base=10))) +
                    scale_fill_continuous(low="dodgerblue1",high="firebrick1",name=(expression(italic(-log(Pval))))) +     
@@ -101,7 +101,7 @@ hsq_plot
 ```
 
 #### Proportion h2 Explained / SNP Set Proportion (HP/SSP) Plot 
-```{r}
+```{r fig.width=10, fig.height=10}
 hsq_plot <- ggplot(data=hsq_df, aes(y=hp, x=ssp)) + geom_point(size=5,shape=21,aes(fill=-log(pval,base=10))) +
                    geom_abline(intercept=0,slope=1) + 
                    scale_fill_continuous(low="dodgerblue1",high="firebrick1",name=(expression(italic(-log(Pval))))) +     
