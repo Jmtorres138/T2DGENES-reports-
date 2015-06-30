@@ -1,0 +1,167 @@
+---
+title: "T2DGENES Mediation"
+author: "Jason Torres"
+date: "June 19, 2015"
+output: html_document
+---
+
+```{r}
+library(ggplot2)
+library(data.table)
+```
+
+### WTCCC Analyses 
+#### Mediation 
+
+```{r}
+med_df <- data.frame(fread("/Users/jtorres/Google Drive/Projects/PrediXcan/T2D-GENES/data_files/mediation.WTCCC.txt"))
+rn <- med_df[,1]
+rnew <- paste0(rn[c(2,5,8,11,14,17,20,23,26,29,32,35,38,41)],".Comp")
+rn[c(2,5,8,11,14,17,20,23,26,29,32,35,38,41)] <- rnew
+med_df[,1] <- rn
+rnew <- paste0(rn[c(3,6,9,12,15,18,21,24,27,30,33,36,39,42)],".GREX")
+rn[c(3,6,9,12,15,18,21,24,27,30,33,36,39,42)] <- rnew
+med_df[,1] <- rn
+```
+
+####  PVE Plot 
+```{r fig.width=10, fig.height=10}
+med.plot <- ggplot(data=med_df, aes(y=h2, x=tissue)) + geom_errorbar(aes(ymax=h2+se,ymin=h2-se, width=0.25)) +      
+                   geom_point(size=5,shape=21,aes(fill=-log(pval,base=10))) +
+                   scale_fill_continuous(low="dodgerblue1",high="firebrick1",name=(expression(italic(-log(Pval))))) +     
+                   coord_cartesian(ylim=c(0,1)) + ggtitle("WTCCC\nMediation Analysis") +
+                   ylab((expression(italic('PVE')))) + theme_bw() + 
+                   theme(axis.line = element_line(colour = "black"),
+                         panel.grid.major = element_blank(),
+                         panel.background = element_blank(),
+                         plot.title = element_text(lineheight=2, face="bold")) + 
+                         theme(axis.text.x=element_text(angle=-30, hjust=0,size=14),panel.grid.major=element_line(size=0.1),
+                         panel.grid.minor=element_blank(),axis.title.x=element_text(size=15,face="bold",vjust=-0.2),
+                         axis.title.y=element_text(size=16,face="bold",vjust=0.25), panel.grid.major=element_line(size=0.1),
+                         panel.grid.minor=element_blank(), axis.text.y=element_text(size=15),legend.text=element_text(size=14),
+                         legend.title=element_text(size=11)) +
+                   scale_y_continuous(breaks = round(seq(0,1, by = 0.1),1)) 
+med.plot
+```
+
+
+####  PVE Plot - Not Showing GREX observations  
+```{r fig.width=10, fig.height=10}
+med.plot <- ggplot(data=med_df[-c(3,6,9,12,15,18,21,24,27,30,33,36,39,42),], aes(y=h2, x=tissue)) + geom_errorbar(aes(ymax=h2+se,ymin=h2-se, width=0.25)) +      
+                   geom_point(size=5,shape=21,aes(fill=-log(pval,base=10))) +
+                   scale_fill_continuous(low="dodgerblue1",high="firebrick1",name=(expression(italic(-log(Pval))))) +     
+                   coord_cartesian(ylim=c(0,1)) + ggtitle("WTCCC\nMediation Analysis") +
+                   ylab((expression(italic('PVE')))) + theme_bw() + 
+                   theme(axis.line = element_line(colour = "black"),
+                         panel.grid.major = element_blank(),
+                         panel.background = element_blank(),
+                         plot.title = element_text(lineheight=2, face="bold")) + 
+                         theme(axis.text.x=element_text(angle=-30, hjust=0,size=14),panel.grid.major=element_line(size=0.1),
+                         panel.grid.minor=element_blank(),axis.title.x=element_text(size=15,face="bold",vjust=-0.2),
+                         axis.title.y=element_text(size=16,face="bold",vjust=0.25), panel.grid.major=element_line(size=0.1),
+                         panel.grid.minor=element_blank(), axis.text.y=element_text(size=15),legend.text=element_text(size=14),
+                         legend.title=element_text(size=11)) +
+                   scale_y_continuous(breaks = round(seq(0,1, by = 0.1),1)) 
+med.plot
+```
+
+
+####  PVE Plot - GREX ONLY 
+```{r fig.width=10, fig.height=10}
+med.plot <- ggplot(data=med_df[c(3,6,9,12,15,18,21,24,27,30,33,36,39,42),], aes(y=h2, x=tissue)) + geom_errorbar(aes(ymax=h2+se,ymin=h2-se, width=0.25)) +      
+                   geom_point(size=5,shape=21,aes(fill=-log(pval,base=10))) +
+                   scale_fill_continuous(low="dodgerblue1",high="firebrick1",name=(expression(italic(-log(Pval))))) +     
+                   coord_cartesian(ylim=c(0,1)) + ggtitle("WTCCC\nMediation Analysis") +
+                   ylab((expression(italic('PVE')))) + theme_bw() + 
+                   theme(axis.line = element_line(colour = "black"),
+                         panel.grid.major = element_blank(),
+                         panel.background = element_blank(),
+                         plot.title = element_text(lineheight=2, face="bold")) + 
+                         theme(axis.text.x=element_text(angle=-30, hjust=0,size=14),panel.grid.major=element_line(size=0.1),
+                         panel.grid.minor=element_blank(),axis.title.x=element_text(size=15,face="bold",vjust=-0.2),
+                         axis.title.y=element_text(size=16,face="bold",vjust=0.25), panel.grid.major=element_line(size=0.1),
+                         panel.grid.minor=element_blank(), axis.text.y=element_text(size=15),legend.text=element_text(size=14),
+                         legend.title=element_text(size=11)) +
+                   scale_y_continuous(breaks = round(seq(0,1, by = 0.1),1)) 
+med.plot
+```
+
+
+
+### Starr County Analyses 
+#### Mediation 
+
+```{r}
+med_df <- data.frame(fread("/Users/jtorres/Google Drive/Projects/PrediXcan/T2D-GENES/data_files/mediation.HS.txt"))
+rn <- med_df[,1]
+rnew <- paste0(rn[c(2,5,8,11,14,17,20,23,26,29,32,35,38,41)],".Comp")
+rn[c(2,5,8,11,14,17,20,23,26,29,32,35,38,41)] <- rnew
+med_df[,1] <- rn
+rnew <- paste0(rn[c(3,6,9,12,15,19,21,24,27,30,33,36,39,42)],".GREX")
+rn[c(3,6,9,12,15,19,21,24,27,30,33,36,39,42)] <- rnew
+med_df[,1] <- rn
+```
+
+#### PVE Plot 
+```{r fig.width=10, fig.height=10}
+med.plot <- ggplot(data=med_df, aes(y=h2, x=tissue)) + geom_errorbar(aes(ymax=h2+se,ymin=h2-se, width=0.25)) +      
+                   geom_point(size=5,shape=21,aes(fill=-log(pval,base=10))) +
+                   scale_fill_continuous(low="dodgerblue1",high="firebrick1",name=(expression(italic(-log(Pval))))) +     
+                   coord_cartesian(ylim=c(0,1)) + ggtitle("Starr County\nMediation Analysis ") +
+                   ylab((expression(italic('PVE')))) + theme_bw() + 
+                   theme(axis.line = element_line(colour = "black"),
+                         panel.grid.major = element_blank(),
+                         panel.background = element_blank(),
+                         plot.title = element_text(lineheight=2, face="bold")) + 
+                         theme(axis.text.x=element_text(angle=-30, hjust=0,size=14),panel.grid.major=element_line(size=0.1),
+                         panel.grid.minor=element_blank(),axis.title.x=element_text(size=15,face="bold",vjust=-0.2),
+                         axis.title.y=element_text(size=16,face="bold",vjust=0.25), panel.grid.major=element_line(size=0.1),
+                         panel.grid.minor=element_blank(), axis.text.y=element_text(size=15),legend.text=element_text(size=14),
+                         legend.title=element_text(size=11)) +
+                   scale_y_continuous(breaks = round(seq(0,1, by = 0.1),1)) 
+med.plot
+```
+
+
+
+####  PVE Plot - Not Showing GREX observations  
+```{r fig.width=10, fig.height=10}
+med.plot <- ggplot(data=med_df[-c(3,6,9,12,15,18,21,24,27,30,33,36,39,42),], aes(y=h2, x=tissue)) + geom_errorbar(aes(ymax=h2+se,ymin=h2-se, width=0.25)) +      
+                   geom_point(size=5,shape=21,aes(fill=-log(pval,base=10))) +
+                   scale_fill_continuous(low="dodgerblue1",high="firebrick1",name=(expression(italic(-log(Pval))))) +     
+                   coord_cartesian(ylim=c(0,1)) + ggtitle("Starr County\nMediation Analysis") +
+                   ylab((expression(italic('PVE')))) + theme_bw() + 
+                   theme(axis.line = element_line(colour = "black"),
+                         panel.grid.major = element_blank(),
+                         panel.background = element_blank(),
+                         plot.title = element_text(lineheight=2, face="bold")) + 
+                         theme(axis.text.x=element_text(angle=-30, hjust=0,size=14),panel.grid.major=element_line(size=0.1),
+                         panel.grid.minor=element_blank(),axis.title.x=element_text(size=15,face="bold",vjust=-0.2),
+                         axis.title.y=element_text(size=16,face="bold",vjust=0.25), panel.grid.major=element_line(size=0.1),
+                         panel.grid.minor=element_blank(), axis.text.y=element_text(size=15),legend.text=element_text(size=14),
+                         legend.title=element_text(size=11)) +
+                   scale_y_continuous(breaks = round(seq(0,1, by = 0.1),1)) 
+med.plot
+```
+
+
+####  PVE Plot - GREX ONLY 
+```{r fig.width=10, fig.height=10}
+med.plot <- ggplot(data=med_df[c(3,6,9,12,15,18,21,24,27,30,33,36,39,42),], aes(y=h2, x=tissue)) + geom_errorbar(aes(ymax=h2+se,ymin=h2-se, width=0.25)) +      
+                   geom_point(size=5,shape=21,aes(fill=-log(pval,base=10))) +
+                   scale_fill_continuous(low="dodgerblue1",high="firebrick1",name=(expression(italic(-log(Pval))))) +     
+                   coord_cartesian(ylim=c(0,1)) + ggtitle("Starr County\nMediation Analysis") +
+                   ylab((expression(italic('PVE')))) + theme_bw() + 
+                   theme(axis.line = element_line(colour = "black"),
+                         panel.grid.major = element_blank(),
+                         panel.background = element_blank(),
+                         plot.title = element_text(lineheight=2, face="bold")) + 
+                         theme(axis.text.x=element_text(angle=-30, hjust=0,size=14),panel.grid.major=element_line(size=0.1),
+                         panel.grid.minor=element_blank(),axis.title.x=element_text(size=15,face="bold",vjust=-0.2),
+                         axis.title.y=element_text(size=16,face="bold",vjust=0.25), panel.grid.major=element_line(size=0.1),
+                         panel.grid.minor=element_blank(), axis.text.y=element_text(size=15),legend.text=element_text(size=14),
+                         legend.title=element_text(size=11)) +
+                   scale_y_continuous(breaks = round(seq(0,1, by = 0.1),1)) 
+med.plot
+```
+
