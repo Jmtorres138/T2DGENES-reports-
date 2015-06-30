@@ -1,0 +1,123 @@
+---
+title: "T2D-hsq_mediate"
+author: "Jason Torres"
+date: "June 19, 2015"
+output: html_document
+---
+
+```{r}
+library(ggplot2)
+library(data.table)
+```
+
+### WTCCC Analyses 
+#### Heritability 
+
+```{r}
+hsq_df <- data.frame(fread("/Users/jtorres/Google Drive/Projects/PrediXcan/T2D-GENES/data_files/heritability.WTCCC.txt"))
+rn <- hsq_df[,1]
+rnew <- paste0(rn[c(2,4,6,8,10,12,14,16,18,20,22,24,26,28)],".Comp")
+rn[c(2,4,6,8,10,12,14,16,18,20,22,24,26,28)] <- rnew
+hsq_df[,1] <- rn
+
+```
+
+#### h2 Plot 
+```{r}
+hsq_plot <- ggplot(data=hsq_df, aes(y=h2, x=tissue)) + geom_errorbar(aes(ymax=h2+se,ymin=h2-se, width=0.25)) +      
+                   geom_point(size=5,shape=21,aes(fill=-log(pval,base=10))) +
+                   scale_fill_continuous(low="dodgerblue1",high="firebrick1",name=(expression(italic(-log(Pval))))) +     
+                   coord_cartesian(ylim=c(0,1)) + ggtitle("WTCCC\nPredictor SNP Heritability") +
+                   ylab((expression(italic('Va/Vp')))) + theme_bw() + 
+                   theme(axis.line = element_line(colour = "black"),
+                         panel.grid.major = element_blank(),
+                         panel.background = element_blank(),
+                         plot.title = element_text(lineheight=2, face="bold")) + 
+                         theme(axis.text.x=element_text(angle=-30, hjust=0,size=14),panel.grid.major=element_line(size=0.1),
+                         panel.grid.minor=element_blank(),axis.title.x=element_text(size=15,face="bold",vjust=-0.2),
+                         axis.title.y=element_text(size=16,face="bold",vjust=0.25), panel.grid.major=element_line(size=0.1),
+                         panel.grid.minor=element_blank(), axis.text.y=element_text(size=15),legend.text=element_text(size=14),
+                         legend.title=element_text(size=11)) +
+                   scale_y_continuous(breaks = round(seq(min(hsq_df$h2),1, by = 0.1),1)) 
+hsq_plot
+```
+
+
+#### Proportion h2 Explained / SNP Set Proportion (HP/SSP) Plot 
+```{r}
+hsq_plot <- ggplot(data=hsq_df, aes(y=hp, x=ssp)) + geom_point(size=5,shape=21,aes(fill=-log(pval,base=10))) +
+                   geom_abline(intercept=0,slope=1) + 
+                   scale_fill_continuous(low="dodgerblue1",high="firebrick1",name=(expression(italic(-log(Pval))))) +     
+                   coord_cartesian(ylim=c(0,1)) + ggtitle("WTCCC\nPredictor SNP Explained Heritability") +
+                   ylab(expression(italic('Proportion Va/Vp Explained'))) + 
+                   xlab("SNP Set Proportion") + theme_bw() + 
+                   theme(axis.line = element_line(colour = "black"),
+                         panel.grid.major = element_blank(),
+                         panel.background = element_blank(),
+                         plot.title = element_text(lineheight=2, face="bold")) + 
+                         theme(axis.text.x=element_text(hjust=0,size=14),panel.grid.major=element_line(size=0.1),
+                         panel.grid.minor=element_blank(),axis.title.x=element_text(size=15,face="bold",vjust=-0.2),
+                         axis.title.y=element_text(size=16,face="bold",vjust=0.25), panel.grid.major=element_line(size=0.1),
+                         panel.grid.minor=element_blank(), axis.text.y=element_text(size=15),legend.text=element_text(size=14),
+                         legend.title=element_text(size=11)) +
+                   scale_y_continuous(breaks = round(seq(min(hsq_df$h2),1, by = 0.1),1)) +
+                   scale_x_continuous(breaks = round(seq(min(hsq_df$ssp),1, by = 0.1),1)) +
+                   geom_text(aes(label=tissue,size=(hp/ssp)))
+hsq_plot
+```
+
+
+
+
+### Starr County Analyses 
+#### Heritability 
+
+```{r}
+hsq_df <- data.frame(fread("/Users/jtorres/Google Drive/Projects/PrediXcan/T2D-GENES/data_files/heritability.HS.txt"))
+rn <- hsq_df[,1]
+rnew <- paste0(rn[c(2,4,6,8,10,12,14,16,18,20,22,24,26,28)],".Comp")
+rn[c(2,4,6,8,10,12,14,16,18,20,22,24,26,28)] <- rnew
+hsq_df[,1] <- rn
+```
+
+#### h2 Plot
+```{r}
+hsq_plot <- ggplot(data=hsq_df, aes(y=h2, x=tissue)) + geom_errorbar(aes(ymax=h2+se,ymin=h2-se, width=0.25)) +      
+                   geom_point(size=5,shape=21,aes(fill=-log(pval,base=10))) +
+                   scale_fill_continuous(low="dodgerblue1",high="firebrick1",name=(expression(italic(-log(Pval))))) +     
+                   coord_cartesian(ylim=c(0,1)) + ggtitle("Starr County\nPredictor SNP Heritability") +
+                   ylab((expression(italic('Va/Vp')))) + theme_bw() + 
+                   theme(axis.line = element_line(colour = "black"),
+                         panel.grid.major = element_blank(),
+                         panel.background = element_blank(),
+                         plot.title = element_text(lineheight=2, face="bold")) + 
+                         theme(axis.text.x=element_text(angle=-30, hjust=0,size=14),panel.grid.major=element_line(size=0.1),
+                         panel.grid.minor=element_blank(),axis.title.x=element_text(size=15,face="bold",vjust=-0.2),
+                         axis.title.y=element_text(size=16,face="bold",vjust=0.25), panel.grid.major=element_line(size=0.1),
+                         panel.grid.minor=element_blank(), axis.text.y=element_text(size=15),legend.text=element_text(size=14),
+                         legend.title=element_text(size=11)) +
+                   scale_y_continuous(breaks = round(seq(min(hsq_df$h2),1, by = 0.1),1)) 
+hsq_plot
+```
+
+#### Proportion h2 Explained / SNP Set Proportion (HP/SSP) Plot 
+```{r}
+hsq_plot <- ggplot(data=hsq_df, aes(y=hp, x=ssp)) + geom_point(size=5,shape=21,aes(fill=-log(pval,base=10))) +
+                   geom_abline(intercept=0,slope=1) + 
+                   scale_fill_continuous(low="dodgerblue1",high="firebrick1",name=(expression(italic(-log(Pval))))) +     
+                   coord_cartesian(ylim=c(0,1)) + ggtitle("Starr County\nPredictor SNP Explained Heritability") +
+                   ylab(expression(italic('Proportion Va/Vp Explained'))) + 
+                   xlab("SNP Set Proportion") + theme_bw() + 
+                   theme(axis.line = element_line(colour = "black"),
+                         panel.grid.major = element_blank(),
+                         panel.background = element_blank(),
+                         plot.title = element_text(lineheight=2, face="bold")) + 
+                         theme(axis.text.x=element_text(hjust=0,size=14),panel.grid.major=element_line(size=0.1),
+                         panel.grid.minor=element_blank(),axis.title.x=element_text(size=15,face="bold",vjust=-0.2),
+                         axis.title.y=element_text(size=16,face="bold",vjust=0.25), panel.grid.major=element_line(size=0.1),
+                         panel.grid.minor=element_blank(), axis.text.y=element_text(size=15),legend.text=element_text(size=14),
+                         legend.title=element_text(size=11)) +
+                   scale_y_continuous(breaks = round(seq(min(hsq_df$h2),1, by = 0.1),1)) +
+                   geom_text(aes(label=tissue,size=(hp/ssp)))
+hsq_plot
+```
