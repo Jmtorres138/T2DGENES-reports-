@@ -84,6 +84,9 @@ tiss.vec <- c("Adipose-Subcutaneous","AdrenalGland","Artery-Coronary","Brain-Cer
               "Brain-Cortex","Brain-Hypothalamus","Cells-EBV-transformedlymphocytes","Colon-Sigmoid",
               "Colon-Transverse","Liver","Muscle-Skeletal","Nerve-Tibial","Pancreas","WholeBlood",
               "WholeBloodDGN")
+tiss.vec.short <- c("Adipose-Subcutaneous","AdrenalGland","Artery-Coronary","Brain-Cerebellum",
+              "Brain-Cortex","Brain-Hypothalamus","Cells-EBV-transformedlymphocytes","Colon-Sigmoid",
+              "Colon-Transverse","Liver","Muscle-Skeletal","Nerve-Tibial","Pancreas","WholeBlood")
 f1 <- function(x,y){paste0(x,y)}
 ```
 
@@ -101,6 +104,36 @@ f2 <- function(tissue){
           qqunif(df$iv_P,title=tissue)
 }
 sapply(tiss.vec,f2)
+f3 <- function(tissue){
+          filename <- paste0(f1(meta.sub.dir,tissue),"_0.5_meta.txt")
+          df <- data.frame(fread(filename))
+          df.ord <- df[order(df$iv_P,decreasing=FALSE),]
+          top.genes <- df.ord$Gene[1:100]
+          return(top.genes)
+}
+topgenes.df <- data.frame(sapply(tiss.vec,f3),stringsAsFactors=FALSE)
+topgenes <- as.vector(t(topgenes.df))
+count.df <- data.frame(table(topgenes)); count.df$topgenes <- as.character(count.df$topgenes)
+count.df.EXen <- count.df[order(count.df$Freq,decreasing=TRUE),]
+topgenes.EXen <- topgenes
+plot <- ggplot(count.df.EXen[1:20,],aes(x=reorder(topgenes,-Freq,max),y=Freq)) + 
+               geom_bar(stat="identity",fill="dodgerblue1",color="Black") + 
+               theme_bw() + coord_cartesian(ylim=c(0,15)) + 
+               theme(axis.line = element_line(colour = "black"),
+                 panel.grid.major = element_blank(),
+                 panel.grid.minor = element_blank(),
+                 panel.background = element_blank(),
+                 plot.title = element_text(lineheight=2, face="bold")) + 
+               theme(axis.text.x=element_text(angle=-30, hjust=0,size=14),panel.grid.major=element_line(size=0.1),
+               panel.grid.minor=element_blank(),axis.title.x=element_text(size=15,face="bold",vjust=-0.2),
+               axis.title.y=element_text(size=16,face="bold",vjust=0.25), panel.grid.major=element_line(size=0.1),
+               panel.grid.minor=element_blank(), axis.text.y=element_text(size=15),legend.text=element_text(size=14),
+               legend.title=element_text(size=11)) +
+               scale_y_continuous(breaks = round(seq(0,15, by = 1),1)) +
+               ylab("Tissue Count") + xlab("Gene") + ggtitle("Top Genes Across Tissues\nMeta-Analysis: WTCCC Excluded")
+
+plot
+topgenes.df[1:10,]
 ```
 
 ## Meta-Analyses: WTCCC **INCLUDED** 
@@ -112,6 +145,36 @@ f2 <- function(tissue){
           qqunif(df$iv_P,title=tissue)
 }
 sapply(tiss.vec,f2)
+f3 <- function(tissue){
+          filename <- paste0(f1(meta.all.dir,tissue),"_0.5_meta.txt")
+          df <- data.frame(fread(filename))
+          df.ord <- df[order(df$iv_P,decreasing=FALSE),]
+          top.genes <- df.ord$Gene[1:100]
+          return(top.genes)
+}
+topgenes.df <- data.frame(sapply(tiss.vec,f3),stringsAsFactors=FALSE)
+topgenes <- as.vector(t(topgenes.df))
+count.df <- data.frame(table(topgenes)); count.df$topgenes <- as.character(count.df$topgenes)
+count.df.INen <- count.df[order(count.df$Freq,decreasing=TRUE),]
+topgenes.INen <- topgenes
+plot <- ggplot(count.df.INen[1:20,],aes(x=reorder(topgenes,-Freq,max),y=Freq)) + 
+               geom_bar(stat="identity",fill="dodgerblue1",color="Black") + 
+               theme_bw() + coord_cartesian(ylim=c(0,15)) + 
+               theme(axis.line = element_line(colour = "black"),
+                 panel.grid.major = element_blank(),
+                 panel.grid.minor = element_blank(),
+                 panel.background = element_blank(),
+                 plot.title = element_text(lineheight=2, face="bold")) + 
+               theme(axis.text.x=element_text(angle=-30, hjust=0,size=14),panel.grid.major=element_line(size=0.1),
+               panel.grid.minor=element_blank(),axis.title.x=element_text(size=15,face="bold",vjust=-0.2),
+               axis.title.y=element_text(size=16,face="bold",vjust=0.25), panel.grid.major=element_line(size=0.1),
+               panel.grid.minor=element_blank(), axis.text.y=element_text(size=15),legend.text=element_text(size=14),
+               legend.title=element_text(size=11)) +
+               scale_y_continuous(breaks = round(seq(0,15, by = 1),1)) +
+               ylab("Tissue Count") + xlab("Gene") + ggtitle("Top Genes Across Tissues\nMeta-Analysis: WTCCC Included")
+
+plot
+topgenes.df[1:10,]
 ```
 
 # Lasso (alpha=1)
@@ -124,7 +187,37 @@ f2 <- function(tissue){
           df <- data.frame(fread(filename))
           qqunif(df$iv_P,title=tissue)
 }
-sapply(tiss.vec,f2)
+sapply(tiss.vec.short,f2)
+f3 <- function(tissue){
+          filename <- paste0(f1(meta.sub.dir,tissue),"_1_meta.txt")
+          df <- data.frame(fread(filename))
+          df.ord <- df[order(df$iv_P,decreasing=FALSE),]
+          top.genes <- df.ord$Gene[1:100]
+          return(top.genes)
+}
+topgenes.df <- data.frame(sapply(tiss.vec.short,f3),stringsAsFactors=FALSE)
+topgenes <- as.vector(t(topgenes.df))
+count.df <- data.frame(table(topgenes)); count.df$topgenes <- as.character(count.df$topgenes)
+count.df.EXls <- count.df[order(count.df$Freq,decreasing=TRUE),]
+topgenes.EXls <- topgenes
+plot <- ggplot(count.df.EXls[1:20,],aes(x=reorder(topgenes,-Freq,max),y=Freq)) + 
+               geom_bar(stat="identity",fill="dodgerblue1",color="Black") + 
+               theme_bw() + coord_cartesian(ylim=c(0,15)) + 
+               theme(axis.line = element_line(colour = "black"),
+                 panel.grid.major = element_blank(),
+                 panel.grid.minor = element_blank(),
+                 panel.background = element_blank(),
+                 plot.title = element_text(lineheight=2, face="bold")) + 
+               theme(axis.text.x=element_text(angle=-30, hjust=0,size=14),panel.grid.major=element_line(size=0.1),
+               panel.grid.minor=element_blank(),axis.title.x=element_text(size=15,face="bold",vjust=-0.2),
+               axis.title.y=element_text(size=16,face="bold",vjust=0.25), panel.grid.major=element_line(size=0.1),
+               panel.grid.minor=element_blank(), axis.text.y=element_text(size=15),legend.text=element_text(size=14),
+               legend.title=element_text(size=11)) +
+               scale_y_continuous(breaks = round(seq(0,15, by = 1),1)) +
+               ylab("Tissue Count") + xlab("Gene") + ggtitle("Top Genes Across Tissues\nMeta-Analysis: WTCCC Excluded")
+
+plot
+topgenes.df[1:10,]
 ```
 
 ## Meta-Analyses: WTCCC **INCLUDED** 
@@ -135,6 +228,92 @@ f2 <- function(tissue){
           df <- data.frame(fread(filename))
           qqunif(df$iv_P,title=tissue)
 }
-sapply(tiss.vec,f2)
+sapply(tiss.vec.short,f2)
+f3 <- function(tissue){
+          filename <- paste0(f1(meta.all.dir,tissue),"_1_meta.txt")
+          df <- data.frame(fread(filename))
+          df.ord <- df[order(df$iv_P,decreasing=FALSE),]
+          top.genes <- df.ord$Gene[1:100]
+          return(top.genes)
+}
+topgenes.df <- data.frame(sapply(tiss.vec.short,f3),stringsAsFactors=FALSE)
+topgenes <- as.vector(t(topgenes.df))
+count.df <- data.frame(table(topgenes)); count.df$topgenes <- as.character(count.df$topgenes)
+count.df.INls <- count.df[order(count.df$Freq,decreasing=TRUE),]
+topgenes.INls <- topgenes
+plot <- ggplot(count.df.INls[1:20,],aes(x=reorder(topgenes,-Freq,max),y=Freq)) + 
+               geom_bar(stat="identity",fill="dodgerblue1",color="Black") + 
+               theme_bw() + coord_cartesian(ylim=c(0,15)) + 
+               theme(axis.line = element_line(colour = "black"),
+                 panel.grid.major = element_blank(),
+                 panel.grid.minor = element_blank(),
+                 panel.background = element_blank(),
+                 plot.title = element_text(lineheight=2, face="bold")) + 
+               theme(axis.text.x=element_text(angle=-30, hjust=0,size=14),panel.grid.major=element_line(size=0.1),
+               panel.grid.minor=element_blank(),axis.title.x=element_text(size=15,face="bold",vjust=-0.2),
+               axis.title.y=element_text(size=16,face="bold",vjust=0.25), panel.grid.major=element_line(size=0.1),
+               panel.grid.minor=element_blank(), axis.text.y=element_text(size=15),legend.text=element_text(size=14),
+               legend.title=element_text(size=11)) +
+               scale_y_continuous(breaks = round(seq(0,15, by = 1),1)) +
+               ylab("Tissue Count") + xlab("Gene") + ggtitle("Top Genes Across Tissues\nMeta-Analysis: WTCCC Included")
+
+plot
+topgenes.df[1:10,]
 ```
+
+
+# Top Genes Analyses across Meta-Analyses 
+## WTCCC Excluded 
+```{r fig.width=20, fig.height=8}
+TopGenes <-  c(topgenes.EXen,topgenes.EXls)
+count.df <- data.frame(table(TopGenes)); count.df$TopGenes <- as.character(count.df$TopGenes)
+count.df<- count.df[order(count.df$Freq,decreasing=TRUE),]
+plot <- ggplot(count.df[1:50,],aes(x=reorder(TopGenes,-Freq,max),y=Freq)) + 
+               geom_bar(stat="identity",fill="maroon",color="Black") + 
+               theme_bw() + coord_cartesian(ylim=c(0,30)) + 
+               theme(axis.line = element_line(colour = "black"),
+                 panel.grid.major = element_blank(),
+                 panel.grid.minor = element_blank(),
+                 panel.background = element_blank(),
+                 plot.title = element_text(lineheight=2, face="bold")) + 
+               theme(axis.text.x=element_text(angle=-30, hjust=0,size=14),panel.grid.major=element_line(size=0.1),
+               panel.grid.minor=element_blank(),axis.title.x=element_text(size=15,face="bold",vjust=-0.2),
+               axis.title.y=element_text(size=16,face="bold",vjust=0.25), panel.grid.major=element_line(size=0.1),
+               panel.grid.minor=element_blank(), axis.text.y=element_text(size=15),legend.text=element_text(size=14),
+               legend.title=element_text(size=11)) +
+               scale_y_continuous(breaks = round(seq(0,30, by = 2),1)) +
+               ylab("Total Count") + xlab("Gene") + ggtitle("Top Genes Across Meta-analyses\nWTCCC Excluded")
+
+plot
+write.table(count.df,"/Users/jtorres/Google Drive/Projects/PrediXcan/T2D-GENES/T2DGENES-reports-/EX.meta.genes",
+            sep="\t",row.names=FALSE,quote=FALSE)
+```
+
+
+## WTCCC Included
+```{r fig.width=20, fig.height=8}
+TopGenes <-  c(topgenes.INen,topgenes.INls) 
+count.df <- data.frame(table(TopGenes)); count.df$TopGenes <- as.character(count.df$TopGenes)
+count.df<- count.df[order(count.df$Freq,decreasing=TRUE),]
+plot <- ggplot(count.df[1:50,],aes(x=reorder(TopGenes,-Freq,max),y=Freq)) + 
+               geom_bar(stat="identity",fill="maroon",color="Black") + 
+               theme_bw() + coord_cartesian(ylim=c(0,30)) + 
+               theme(axis.line = element_line(colour = "black"),
+                 panel.grid.major = element_blank(),
+                 panel.grid.minor = element_blank(),
+                 panel.background = element_blank(),
+                 plot.title = element_text(lineheight=2, face="bold")) + 
+               theme(axis.text.x=element_text(angle=-30, hjust=0,size=14),panel.grid.major=element_line(size=0.1),
+               panel.grid.minor=element_blank(),axis.title.x=element_text(size=15,face="bold",vjust=-0.2),
+               axis.title.y=element_text(size=16,face="bold",vjust=0.25), panel.grid.major=element_line(size=0.1),
+               panel.grid.minor=element_blank(), axis.text.y=element_text(size=15),legend.text=element_text(size=14),
+               legend.title=element_text(size=11)) +
+               scale_y_continuous(breaks = round(seq(0,30, by = 2),1)) +
+               ylab("Total Count") + xlab("Gene") + ggtitle("Top Genes Across Meta-analyses\nWTCCC Included")
+
+plot
+write.table(count.df,"/Users/jtorres/Google Drive/Projects/PrediXcan/T2D-GENES/T2DGENES-reports-/IN.meta.genes",
+            sep="\t",row.names=FALSE,quote=FALSE)
+```
+
 
