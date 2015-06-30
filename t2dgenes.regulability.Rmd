@@ -1,0 +1,185 @@
+---
+title: "Regulability_T2D-GENES"
+author: "Jason Matthew Torres"
+date: "May 25, 2015"
+output: pdf_document
+---
+
+```{r}
+library("data.table")
+library("ggplot2")
+
+df <- fread("/Users/jtorres/Google Drive/Projects/PrediXcan/T2D-GENES/regulability/regulability.txt")
+names(df) <- c("Cohort","Tissue","Alpha","h2","SE","LRT","Pval")
+wtccc <- subset(df,Cohort=="WTCCC")
+um <- subset(df,Cohort=="UM")
+ua <- subset(df,Cohort=="UA")
+hs <- subset(df,Cohort=="HS")
+ek <- subset(df,Cohort=="EK")
+es <- subset(df,Cohort=="ES")
+aw <- subset(df,Cohort=="AW")
+aj <- subset(df,Cohort=="AJ")
+```
+
+## **Cohort Profiles of Regulability** 
+
+```{r, echo=FALSE}
+number_ticks <- function(n) {function(limits) pretty(limits, n)}
+wtccc_plot = ggplot(data=wtccc,aes(x=Tissue,y=h2)) +  geom_errorbar(aes(ymax=h2+SE,ymin=h2-SE, width=0.25)) + geom_point(size=4,shape=21,col="black",aes(fill = -log(Pval,base=10))) + scale_fill_continuous(limits=c(0,14),low="dodgerblue1",high="firebrick1",name=(expression(italic(-log(Pval))))) + coord_cartesian(ylim=c(0,1)) + theme_bw() + ggtitle("WTCCC") + ylab((expression(italic('Va/Vp')))) + 
+           theme(axis.line = element_line(colour = "black"),
+               panel.grid.major = element_blank(),
+               panel.grid.minor = element_blank(),
+               #panel.border = element_blank(),
+               panel.background = element_blank(),
+               plot.title = element_text(lineheight=2, face="bold")) + 
+           theme(axis.text.x=element_text(angle=-30, hjust=0,size=14),panel.grid.major=element_line(size=0.1),
+           panel.grid.minor=element_blank(),axis.title.x=element_text(size=15,face="bold",vjust=-0.2),
+           axis.title.y=element_text(size=16,face="bold",vjust=0.25), panel.grid.major=element_line(size=0.1),
+           panel.grid.minor=element_blank(), axis.text.y=element_text(size=15),legend.text=element_text(size=14),
+           legend.title=element_text(size=11)) +
+  scale_y_continuous(breaks=number_ticks(10)) + geom_hline(yintercept=0.60) + 
+  geom_hline(yintercept=0.66,linetype=2) + geom_hline(yintercept=0.54,linetype=2) + 
+  annotate("rect", xmin=0.2,xmax=15,ymin=.54,ymax=.66,fill="gray1",alpha=1/10)
+wtccc_plot
+#pdf("/Users/mcatquestions/Google Drive/Presentations/GTEx_Community_Meeting2015/reg_wtccc.pdf")
+#wtccc_plot
+#dev.off()
+```
+
+
+```{r, echo=FALSE}
+number_ticks <- function(n) {function(limits) pretty(limits, n)}
+sc_plot = ggplot(data=hs,aes(x=Tissue,y=h2)) +  geom_errorbar(aes(ymax=h2+SE,ymin=h2-SE, width=0.25)) + geom_point(size=4,shape=21,col="black",aes(fill = -log(Pval,base=10))) + scale_fill_continuous(limits=c(0,12),low="dodgerblue1",high="firebrick1",name=(expression(italic(-log(Pval))))) + coord_cartesian(ylim=c(0,1)) + theme_bw() +            ggtitle("Starr County") + ylab((expression(italic('Va/Vp')))) + 
+           theme(axis.line = element_line(colour = "black"),
+               panel.grid.major = element_blank(),
+               #panel.grid.minor = element_blank(),
+               #panel.border = element_blank(),
+               panel.background = element_blank(),
+               plot.title = element_text(lineheight=2, face="bold")) + 
+           theme(axis.text.x=element_text(angle=-30, hjust=0,size=14),panel.grid.major=element_line(size=0.1),
+           panel.grid.minor=element_blank(),axis.title.x=element_text(size=15,face="bold",vjust=-0.2),
+           axis.title.y=element_text(size=16,face="bold",vjust=0.25), panel.grid.major=element_line(size=0.1),
+           panel.grid.minor=element_blank(), axis.text.y=element_text(size=15),legend.text=element_text(size=14),
+           legend.title=element_text(size=11)) +
+  scale_y_continuous(breaks=number_ticks(10)) + geom_hline(yintercept=0.56) + 
+  geom_hline(yintercept=0.71,linetype=2) + geom_hline(yintercept=0.41,linetype=2) + 
+  annotate("rect", xmin=0.2,xmax=15,ymin=.41,ymax=.71,fill="gray1",alpha=1/10)
+sc_plot
+#pdf("/Users/mcatquestions/Google Drive/Presentations/GTEx_Community_Meeting2015/reg_sc.pdf")
+#sc_plot
+#dev.off()
+```
+
+
+```{r, echo=FALSE}
+number_ticks <- function(n) {function(limits) pretty(limits, n)}
+ua_plot = ggplot(data=ua,aes(x=Tissue,y=h2)) +  geom_errorbar(aes(ymax=h2+SE,ymin=h2-SE, width=0.25)) + geom_point(size=4,shape=21,col="black",aes(fill = -log(Pval,base=10))) + scale_fill_continuous(low="dodgerblue1",high="firebrick1",name=(expression(italic(-log(Pval))))) + coord_cartesian(ylim=c(0,1)) + theme_bw() +            ggtitle("European - UA") + ylab((expression(italic('Va/Vp')))) + 
+           theme(axis.line = element_line(colour = "black"),
+               panel.grid.major = element_blank(),
+               #panel.grid.minor = element_blank(),
+               #panel.border = element_blank(),
+               panel.background = element_blank(),
+               plot.title = element_text(lineheight=2, face="bold")) + 
+           theme(axis.text.x=element_text(angle=-30, hjust=0,size=14),panel.grid.major=element_line(size=0.1),
+           panel.grid.minor=element_blank(),axis.title.x=element_text(size=15,face="bold",vjust=-0.2),
+           axis.title.y=element_text(size=16,face="bold",vjust=0.25), panel.grid.major=element_line(size=0.1),
+           panel.grid.minor=element_blank(), axis.text.y=element_text(size=15),legend.text=element_text(size=14),
+           legend.title=element_text(size=11)) +
+  scale_y_continuous(breaks=number_ticks(10))
+ua_plot
+```
+
+
+```{r, echo=FALSE}
+number_ticks <- function(n) {function(limits) pretty(limits, n)}
+um_plot = ggplot(data=um,aes(x=Tissue,y=h2)) +  geom_errorbar(aes(ymax=h2+SE,ymin=h2-SE, width=0.25)) + geom_point(size=4,shape=21,col="black",aes(fill = -log(Pval,base=10))) + scale_fill_continuous(low="dodgerblue1",high="firebrick1",name=(expression(italic(-log(Pval))))) + coord_cartesian(ylim=c(0,1)) + theme_bw() +            ggtitle("European - UM") + ylab((expression(italic('Va/Vp')))) + 
+           theme(axis.line = element_line(colour = "black"),
+               panel.grid.major = element_blank(),
+               #panel.grid.minor = element_blank(),
+               #panel.border = element_blank(),
+               panel.background = element_blank(),
+               plot.title = element_text(lineheight=2, face="bold")) + 
+           theme(axis.text.x=element_text(angle=-30, hjust=0,size=14),panel.grid.major=element_line(size=0.1),
+           panel.grid.minor=element_blank(),axis.title.x=element_text(size=15,face="bold",vjust=-0.2),
+           axis.title.y=element_text(size=16,face="bold",vjust=0.25), panel.grid.major=element_line(size=0.1),
+           panel.grid.minor=element_blank(), axis.text.y=element_text(size=15),legend.text=element_text(size=14),
+           legend.title=element_text(size=11)) +
+  scale_y_continuous(breaks=number_ticks(10))
+um_plot
+```
+
+```{r, echo=FALSE}
+number_ticks <- function(n) {function(limits) pretty(limits, n)}
+aj_plot = ggplot(data=aj,aes(x=Tissue,y=h2)) +  geom_errorbar(aes(ymax=h2+SE,ymin=h2-SE, width=0.25)) + geom_point(size=4,shape=21,col="black",aes(fill = -log(Pval,base=10))) + scale_fill_continuous(low="dodgerblue1",high="firebrick1",name=(expression(italic(-log(Pval))))) + coord_cartesian(ylim=c(0,1)) + theme_bw() +            ggtitle("African American - AJ") + ylab((expression(italic('Va/Vp')))) + 
+           theme(axis.line = element_line(colour = "black"),
+               panel.grid.major = element_blank(),
+               #panel.grid.minor = element_blank(),
+               #panel.border = element_blank(),
+               panel.background = element_blank(),
+               plot.title = element_text(lineheight=2, face="bold")) + 
+           theme(axis.text.x=element_text(angle=-30, hjust=0,size=14),panel.grid.major=element_line(size=0.1),
+           panel.grid.minor=element_blank(),axis.title.x=element_text(size=15,face="bold",vjust=-0.2),
+           axis.title.y=element_text(size=16,face="bold",vjust=0.25), panel.grid.major=element_line(size=0.1),
+           panel.grid.minor=element_blank(), axis.text.y=element_text(size=15),legend.text=element_text(size=14),
+           legend.title=element_text(size=11)) +
+  scale_y_continuous(breaks=number_ticks(10))
+aj_plot
+```
+
+
+```{r, echo=FALSE}
+number_ticks <- function(n) {function(limits) pretty(limits, n)}
+aw_plot = ggplot(data=aw,aes(x=Tissue,y=h2)) +  geom_errorbar(aes(ymax=h2+SE,ymin=h2-SE, width=0.25)) + geom_point(size=4,shape=21,col="black",aes(fill = -log(Pval,base=10))) + scale_fill_continuous(low="dodgerblue1",high="firebrick1",name=(expression(italic(-log(Pval))))) + coord_cartesian(ylim=c(0,1)) + theme_bw() +            ggtitle("African American - AW") + ylab((expression(italic('Va/Vp')))) + 
+           theme(axis.line = element_line(colour = "black"),
+               panel.grid.major = element_blank(),
+               #panel.grid.minor = element_blank(),
+               #panel.border = element_blank(),
+               panel.background = element_blank(),
+               plot.title = element_text(lineheight=2, face="bold")) + 
+           theme(axis.text.x=element_text(angle=-30, hjust=0,size=14),panel.grid.major=element_line(size=0.1),
+           panel.grid.minor=element_blank(),axis.title.x=element_text(size=15,face="bold",vjust=-0.2),
+           axis.title.y=element_text(size=16,face="bold",vjust=0.25), panel.grid.major=element_line(size=0.1),
+           panel.grid.minor=element_blank(), axis.text.y=element_text(size=15),legend.text=element_text(size=14),
+           legend.title=element_text(size=11)) +
+  scale_y_continuous(breaks=number_ticks(10))
+aw_plot
+```
+
+```{r, echo=FALSE}
+number_ticks <- function(n) {function(limits) pretty(limits, n)}
+ek_plot = ggplot(data=ek,aes(x=Tissue,y=h2)) +  geom_errorbar(aes(ymax=h2+SE,ymin=h2-SE, width=0.25)) + geom_point(size=4,shape=21,col="black",aes(fill = -log(Pval,base=10))) + scale_fill_continuous(low="dodgerblue1",high="firebrick1",name=(expression(italic(-log(Pval))))) + coord_cartesian(ylim=c(0,1)) + theme_bw() +            ggtitle("Asian - EK") + ylab((expression(italic('Va/Vp')))) + 
+           theme(axis.line = element_line(colour = "black"),
+               panel.grid.major = element_blank(),
+               #panel.grid.minor = element_blank(),
+               #panel.border = element_blank(),
+               panel.background = element_blank(),
+               plot.title = element_text(lineheight=2, face="bold")) + 
+           theme(axis.text.x=element_text(angle=-30, hjust=0,size=14),panel.grid.major=element_line(size=0.1),
+           panel.grid.minor=element_blank(),axis.title.x=element_text(size=15,face="bold",vjust=-0.2),
+           axis.title.y=element_text(size=16,face="bold",vjust=0.25), panel.grid.major=element_line(size=0.1),
+           panel.grid.minor=element_blank(), axis.text.y=element_text(size=15),legend.text=element_text(size=14),
+           legend.title=element_text(size=11)) +
+  scale_y_continuous(breaks=number_ticks(10))
+ek_plot
+```
+
+
+
+```{r, echo=FALSE}
+number_ticks <- function(n) {function(limits) pretty(limits, n)}
+es_plot = ggplot(data=es,aes(x=Tissue,y=h2)) +  geom_errorbar(aes(ymax=h2+SE,ymin=h2-SE, width=0.25)) + geom_point(size=4,shape=21,col="black",aes(fill = -log(Pval,base=10))) + scale_fill_continuous(low="dodgerblue1",high="firebrick1",name=(expression(italic(-log(Pval))))) + coord_cartesian(ylim=c(0,1)) + theme_bw() +            ggtitle("Asian - ES") + ylab((expression(italic('Va/Vp')))) + 
+           theme(axis.line = element_line(colour = "black"),
+               panel.grid.major = element_blank(),
+               #panel.grid.minor = element_blank(),
+               #panel.border = element_blank(),
+               panel.background = element_blank(),
+               plot.title = element_text(lineheight=2, face="bold")) + 
+           theme(axis.text.x=element_text(angle=-30, hjust=0,size=14),panel.grid.major=element_line(size=0.1),
+           panel.grid.minor=element_blank(),axis.title.x=element_text(size=15,face="bold",vjust=-0.2),
+           axis.title.y=element_text(size=16,face="bold",vjust=0.25), panel.grid.major=element_line(size=0.1),
+           panel.grid.minor=element_blank(), axis.text.y=element_text(size=15),legend.text=element_text(size=14),
+           legend.title=element_text(size=11)) +
+  scale_y_continuous(breaks=number_ticks(10))
+es_plot
+```
+
